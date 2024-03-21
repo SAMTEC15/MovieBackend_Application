@@ -8,7 +8,28 @@ namespace MovieApp_Backend.Controllers
 	[ApiController]
 	public class MovieController : ControllerBase
 	{
-		
+		private readonly OmdbService _omdbService;
+
+		public MovieController(OmdbService omdbService)
+		{
+			_omdbService = omdbService;
+		}
+
+		[HttpGet("search")]
+		public async Task<IActionResult> SearchMovies([FromQuery] string title)
+		{
+			var searchResults = await _omdbService.SearchMoviesAsync(title);
+
+			return Ok(searchResults);
+		}
+
+		[HttpGet("{imdbId}")]
+		public async Task<IActionResult> GetMovieDetails(string imdbId)
+		{
+			var movieDetails = await _omdbService.GetMovieDetailsAsync(imdbId);
+			return Ok(movieDetails);
+		}
+
 	}
 
 }
